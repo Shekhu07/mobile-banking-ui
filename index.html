@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axe Bank - Premium Mobile Banking Dashboard</title>
+    <!-- Google Fonts: Plus Jakarta Sans for headers/numbers, Inter for general UI text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols (Outlined) for native MD3 look -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- ==================== CONTROL PANEL (DESKTOP SIMULATOR) ==================== -->
+        <aside class="control-panel">
+            <div class="panel-header">
+                <span class="material-symbols-outlined logo-icon">terminal</span>
+                <h2>Axe Simulator</h2>
+            </div>
+            <p class="panel-description">Use this sidebar to interact with the mobile app mockup and trigger dynamic states.</p>
+            
+            <!-- Quick Balance Adjuster -->
+            <div class="control-section">
+                <h3>Adjust Financials</h3>
+                <div class="input-group">
+                    <label for="sim-balance">Main Account Balance ($)</label>
+                    <input type="number" id="sim-balance" value="12450.80" step="100">
+                </div>
+                <div class="input-group">
+                    <label for="sim-savings">Savings Goal Target ($)</label>
+                    <input type="number" id="sim-savings-target" value="15000" step="500">
+                </div>
+            </div>
+
+            <!-- Transaction Simulator -->
+            <div class="control-section">
+                <h3>Simulate Transaction</h3>
+                <div class="input-group">
+                    <label for="tx-title">Merchant / Payee</label>
+                    <input type="text" id="tx-title" placeholder="e.g., Starbucks Coffee">
+                </div>
+                <div class="input-group-row">
+                    <div class="input-group">
+                        <label for="tx-amount">Amount ($)</label>
+                        <input type="number" id="tx-amount" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="tx-type">Type</label>
+                        <select id="tx-type">
+                            <option value="debit">Expense (-)</option>
+                            <option value="credit">Income (+)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="tx-category">Category</label>
+                    <select id="tx-category">
+                        <option value="food">Food & Dining</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="utilities">Bills & Utilities</option>
+                        <option value="travel">Travel & Transport</option>
+                        <option value="salary">Salary & Investments</option>
+                    </select>
+                </div>
+                <button id="btn-add-tx" class="btn-primary-sim">Inject Transaction</button>
+            </div>
+
+            <!-- Toast & Notification Injector -->
+            <div class="control-section">
+                <h3>Trigger System Alerts</h3>
+                <div class="button-grid">
+                    <button class="btn-outline-sim" onclick="triggerAlert('low_balance')">Low Balance Alert</button>
+                    <button class="btn-outline-sim" onclick="triggerAlert('fraud_alert')">Fraud Warning</button>
+                    <button class="btn-outline-sim" onclick="triggerAlert('goal_complete')">Goal Reached</button>
+                </div>
+            </div>
+
+            <!-- Theme Accent Changer -->
+            <div class="control-section">
+                <h3>Theme Accent Palette</h3>
+                <div class="color-palette-selector">
+                    <button class="color-btn active" data-theme="default" style="background: linear-gradient(135deg, #D0BCFF, #EFB8C8);"></button>
+                    <button class="color-btn" data-theme="emerald" style="background: linear-gradient(135deg, #A7F3D0, #34D399);"></button>
+                    <button class="color-btn" data-theme="amber" style="background: linear-gradient(135deg, #FDE68A, #F59E0B);"></button>
+                    <button class="color-btn" data-theme="ocean" style="background: linear-gradient(135deg, #93C5FD, #3B82F6);"></button>
+                </div>
+            </div>
+            
+            <div class="panel-footer">
+                <p>Designed using Material Design 3 Spec</p>
+                <p>Antigravity Engine &copy; 2026</p>
+            </div>
+        </aside>
+
+        <!-- ==================== MOBILE PHONE FRAME MOCKUP ==================== -->
+        <main class="phone-frame">
+            <div class="phone-inner">
+                <!-- Phone Top Camera/Speaker Notch -->
+                <div class="phone-notch"></div>
+                
+                <!-- Phone System Status Bar -->
+                <div class="phone-status-bar">
+                    <div class="status-time" id="status-time">09:41</div>
+                    <div class="status-icons">
+                        <span class="material-symbols-outlined icon-small">signal_cellular_4_bar</span>
+                        <span class="material-symbols-outlined icon-small">wifi</span>
+                        <span class="material-symbols-outlined icon-small">battery_5_bar</span>
+                    </div>
+                </div>
+
+                <!-- Notifications Tray (Floating inside mockup) -->
+                <div class="phone-notification-tray" id="notification-tray">
+                    <!-- Dynamic notifications appear here -->
+                </div>
+
+                <!-- ==================== APP CONTENT SCROLL WRAPPER ==================== -->
+                <div class="phone-screen-content">
+                    
+                    <!-- TAB 1: HOME PAGE -->
+                    <div id="tab-home" class="app-tab-page active">
+                        <!-- Header with greetings and user card -->
+                        <header class="app-header">
+                            <div class="user-profile">
+                                <div class="avatar-container">
+                                    <div class="avatar-img">AP</div>
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div class="welcome-text">
+                                    <p class="greeting-subtitle">Welcome back</p>
+                                    <h1 class="greeting-title">Abhishek Pillai</h1>
+                                </div>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn-icon-badge" id="btn-notifications-bell" aria-label="Notifications">
+                                    <span class="material-symbols-outlined">notifications</span>
+                                    <span class="badge-dot"></span>
+                                </button>
+                            </div>
+                        </header>
+
+                        <!-- SEARCH BAR -->
+                        <div class="search-container">
+                            <span class="material-symbols-outlined search-icon">search</span>
+                            <input type="text" id="transaction-search" placeholder="Search transactions, bills, contacts...">
+                        </div>
+
+                        <!-- OVERALL SUMMARY CARD -->
+                        <section class="financial-summary-card">
+                            <div class="card-bg-gradient"></div>
+                            <div class="card-content">
+                                <div class="card-header-row">
+                                    <span class="card-label">Total Balance</span>
+                                    <button class="btn-text-icon" id="toggle-balance-visibility" aria-label="Hide balance">
+                                        <span class="material-symbols-outlined" id="balance-eye-icon">visibility</span>
+                                    </button>
+                                </div>
+                                <div class="balance-display-row">
+                                    <span class="currency-symbol">$</span>
+                                    <span class="balance-amount" id="main-balance-val">12,450.80</span>
+                                </div>
+                                
+                                <div class="cash-flow-summary">
+                                    <div class="flow-item income">
+                                        <span class="material-symbols-outlined arrow-icon">arrow_downward</span>
+                                        <div class="flow-details">
+                                            <span class="flow-label">Income</span>
+                                            <span class="flow-value" id="income-val">+$5,840.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="divider-vertical"></div>
+                                    <div class="flow-item expense">
+                                        <span class="material-symbols-outlined arrow-icon">arrow_upward</span>
+                                        <div class="flow-details">
+                                            <span class="flow-label">Expenses</span>
+                                            <span class="flow-value" id="expenses-val">-$2,120.45</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="quick-cash-flow-bar">
+                                    <div class="flow-fill-income" style="width: 73.4%"></div>
+                                    <div class="flow-fill-expense" style="width: 26.6%"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- KEY METRICS ROW (CAROUSEL SLIDER) -->
+                        <section class="metrics-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Key Financial Metrics</h2>
+                                <span class="metrics-scroll-tip">Swipe <span class="material-symbols-outlined icon-inline">arrow_right_alt</span></span>
+                            </div>
+                            <div class="metrics-carousel">
+                                
+                                <!-- Metric 1: Savings Goal -->
+                                <div class="metric-card">
+                                    <div class="metric-icon-wrapper" style="color: var(--md-sys-color-primary);">
+                                        <span class="material-symbols-outlined">track_changes</span>
+                                    </div>
+                                    <div class="metric-details">
+                                        <span class="metric-label">Savings Target</span>
+                                        <h3 class="metric-value" id="savings-progress-text">83%</h3>
+                                        <p class="metric-desc">Tesla Model Y Fund</p>
+                                    </div>
+                                    <!-- Circular Progress Indicator -->
+                                    <div class="circular-progress-box">
+                                        <svg viewBox="0 0 36 36" class="circular-chart">
+                                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="circle" id="savings-progress-ring" stroke-dasharray="83, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Investment Portfolio Return -->
+                                <div class="metric-card">
+                                    <div class="metric-icon-wrapper" style="color: var(--md-sys-color-tertiary);">
+                                        <span class="material-symbols-outlined">show_chart</span>
+                                    </div>
+                                    <div class="metric-details">
+                                        <span class="metric-label">Investments</span>
+                                        <h3 class="metric-value text-success">+12.4%</h3>
+                                        <p class="metric-desc">Monthly return</p>
+                                    </div>
+                                    <!-- Tiny Trendline SVG -->
+                                    <div class="mini-trend-box">
+                                        <svg viewBox="0 0 60 30" class="mini-chart">
+                                            <path d="M0,25 Q15,10 30,18 T60,5" fill="none" stroke="var(--md-sys-color-tertiary)" stroke-width="2.5" stroke-linecap="round"/>
+                                            <path d="M0,25 Q15,10 30,18 T60,5 L60,30 L0,30 Z" fill="url(#grad-tertiary-light)" opacity="0.15"/>
+                                            <defs>
+                                                <linearGradient id="grad-tertiary-light" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" stop-color="var(--md-sys-color-tertiary)" />
+                                                    <stop offset="100%" stop-color="transparent" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Credit Score -->
+                                <div class="metric-card">
+                                    <div class="metric-icon-wrapper" style="color: #64B5F6;">
+                                        <span class="material-symbols-outlined">speed</span>
+                                    </div>
+                                    <div class="metric-details">
+                                        <span class="metric-label">Credit Score</span>
+                                        <h3 class="metric-value">780</h3>
+                                        <p class="metric-desc">Excellent Rating</p>
+                                    </div>
+                                    <!-- Simple Half-gauge Arc visual -->
+                                    <div class="gauge-box">
+                                        <div class="gauge-arc-back"></div>
+                                        <div class="gauge-arc-front" style="transform: rotate(140deg);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- QUICK ACTIONS GRID -->
+                        <section class="quick-actions-section">
+                            <h2 class="section-title">Quick Actions</h2>
+                            <div class="quick-actions-grid">
+                                <button class="action-btn" onclick="quickAction('send')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">send</span>
+                                    </div>
+                                    <span class="action-label">Send</span>
+                                </button>
+                                <button class="action-btn" onclick="quickAction('scan')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">qr_code_scanner</span>
+                                    </div>
+                                    <span class="action-label">Scan Pay</span>
+                                </button>
+                                <button class="action-btn" onclick="quickAction('bills')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">receipt_long</span>
+                                    </div>
+                                    <span class="action-label">Bills</span>
+                                </button>
+                                <button class="action-btn" onclick="switchTab('cards')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">credit_card</span>
+                                    </div>
+                                    <span class="action-label">Cards</span>
+                                </button>
+                                <button class="action-btn" onclick="quickAction('vault')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">lock</span>
+                                    </div>
+                                    <span class="action-label">Vault</span>
+                                </button>
+                                <button class="action-btn" onclick="quickAction('more')">
+                                    <div class="action-icon-circle">
+                                        <span class="material-symbols-outlined">widgets</span>
+                                    </div>
+                                    <span class="action-label">More</span>
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- SPENDING CATEGORIES BREAKDOWN -->
+                        <section class="spending-section">
+                            <h2 class="section-title">Spending Breakdown</h2>
+                            <div class="spending-container">
+                                <!-- Dynamic Chart Canvas/SVG Container -->
+                                <div class="chart-donut-wrapper">
+                                    <svg width="120" height="120" viewBox="0 0 42 42" class="donut-chart-svg">
+                                        <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="transparent"></circle>
+                                        <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#25242A" stroke-width="4"></circle>
+                                        
+                                        <!-- Segments: Food (40%), Shopping (25%), Bills (20%), Travel (15%) -->
+                                        <!-- Food: Stroke Dasharray = "40 60", Offset = "0" -->
+                                        <circle class="donut-segment segment-food" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="var(--md-sys-color-primary)" stroke-width="4.2" stroke-dasharray="40 60" stroke-dashoffset="0"></circle>
+                                        <!-- Shopping: Stroke Dasharray = "25 75", Offset = "-40" -->
+                                        <circle class="donut-segment segment-shopping" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="var(--md-sys-color-secondary)" stroke-width="4.2" stroke-dasharray="25 75" stroke-dashoffset="-40"></circle>
+                                        <!-- Bills: Stroke Dasharray = "20 80", Offset = "-65" -->
+                                        <circle class="donut-segment segment-bills" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="var(--md-sys-color-tertiary)" stroke-width="4.2" stroke-dasharray="20 80" stroke-dashoffset="-65"></circle>
+                                        <!-- Travel: Stroke Dasharray = "15 85", Offset = "-85" -->
+                                        <circle class="donut-segment segment-travel" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#64B5F6" stroke-width="4.2" stroke-dasharray="15 85" stroke-dashoffset="-85"></circle>
+                                    </svg>
+                                    <div class="donut-center-text">
+                                        <span class="donut-total">$2,120</span>
+                                        <span class="donut-subtitle">Spent</span>
+                                    </div>
+                                </div>
+                                <div class="spending-legend-grid">
+                                    <div class="legend-item">
+                                        <span class="legend-dot color-primary"></span>
+                                        <div class="legend-details">
+                                            <span class="legend-label">Food & Dining</span>
+                                            <span class="legend-value">$848.18 (40%)</span>
+                                        </div>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot color-secondary"></span>
+                                        <div class="legend-details">
+                                            <span class="legend-label">Shopping</span>
+                                            <span class="legend-value">$530.11 (25%)</span>
+                                        </div>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot color-tertiary"></span>
+                                        <div class="legend-details">
+                                            <span class="legend-label">Bills & Utilities</span>
+                                            <span class="legend-value">$424.09 (20%)</span>
+                                        </div>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot color-blue"></span>
+                                        <div class="legend-details">
+                                            <span class="legend-label">Travel</span>
+                                            <span class="legend-value">$318.07 (15%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- RECENT TRANSACTIONS -->
+                        <section class="transactions-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Recent Transactions</h2>
+                                <button class="btn-text" onclick="quickAction('history')">See All</button>
+                            </div>
+                            <div class="transactions-list" id="transactions-list-container">
+                                <!-- Javascript will insert transactions here dynamically -->
+                            </div>
+                        </section>
+                        
+                        <!-- Empty margin for bottom navigation spacing -->
+                        <div class="screen-spacer"></div>
+                    </div>
+
+                    <!-- TAB 2: CARDS PAGE -->
+                    <div id="tab-cards" class="app-tab-page">
+                        <header class="app-header-simple">
+                            <h1 class="page-title">My Cards</h1>
+                            <button class="btn-icon" aria-label="Add Card">
+                                <span class="material-symbols-outlined">add</span>
+                            </button>
+                        </header>
+
+                        <!-- CREDIT CARD CONTAINER -->
+                        <div class="card-visualizer-container">
+                            <div class="credit-card-3d" id="credit-card-element">
+                                <!-- Card Front -->
+                                <div class="card-side card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="card-top">
+                                        <span class="brand-name">AXE BLACK</span>
+                                        <span class="material-symbols-outlined contactless-icon">contactless</span>
+                                    </div>
+                                    <div class="card-chip"></div>
+                                    <div class="card-number-block">
+                                        <span class="card-digits">••••</span>
+                                        <span class="card-digits">••••</span>
+                                        <span class="card-digits">••••</span>
+                                        <span class="card-digits" id="card-last-four">4309</span>
+                                    </div>
+                                    <div class="card-bottom">
+                                        <div class="card-holder-info">
+                                            <span class="label-micro">CARDHOLDER</span>
+                                            <span class="value-name">ABHISHEK PILLAI</span>
+                                        </div>
+                                        <div class="card-expiry-info">
+                                            <span class="label-micro">EXPIRES</span>
+                                            <span class="value-name">09/30</span>
+                                        </div>
+                                        <div class="card-network-logo">
+                                            <div class="network-circle network-c1"></div>
+                                            <div class="network-circle network-c2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Back -->
+                                <div class="card-side card-back">
+                                    <div class="card-stripe"></div>
+                                    <div class="card-signature-bar">
+                                        <div class="card-cvv-box">
+                                            <span class="label-micro">CVV</span>
+                                            <span class="cvv-digits">384</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-info-legal">
+                                        This card is issued by Axe Bank. Authorized signature required. Subject to terms & conditions.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="interaction-hint">Tap card to flip</p>
+
+                        <!-- CARD CONTROLS -->
+                        <section class="card-controls-section">
+                            <div class="control-tile">
+                                <div class="tile-icon-text">
+                                    <span class="material-symbols-outlined tile-icon">ac_unit</span>
+                                    <div class="tile-label-desc">
+                                        <span class="tile-label">Freeze Card</span>
+                                        <span class="tile-desc">Temporarily lock transactions</span>
+                                    </div>
+                                </div>
+                                <label class="switch-container">
+                                    <input type="checkbox" id="switch-freeze">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="control-tile">
+                                <div class="tile-icon-text">
+                                    <span class="material-symbols-outlined tile-icon">language</span>
+                                    <div class="tile-label-desc">
+                                        <span class="tile-label">Online Payments</span>
+                                        <span class="tile-desc">Enable e-commerce purchases</span>
+                                    </div>
+                                </div>
+                                <label class="switch-container">
+                                    <input type="checkbox" id="switch-online" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="control-tile-expanded">
+                                <div class="tile-header-row">
+                                    <div class="tile-icon-text">
+                                        <span class="material-symbols-outlined tile-icon">payment</span>
+                                        <div class="tile-label-desc">
+                                            <span class="tile-label">Daily Limit</span>
+                                            <span class="tile-desc">Limit on standard transactions</span>
+                                        </div>
+                                    </div>
+                                    <span class="limit-value-badge" id="limit-badge-val">$2,500</span>
+                                </div>
+                                <div class="slider-wrapper">
+                                    <input type="range" id="limit-slider" min="500" max="10000" step="500" value="2500" class="md-slider">
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="screen-spacer"></div>
+                    </div>
+
+                    <!-- TAB 3: ANALYTICS PAGE -->
+                    <div id="tab-analytics" class="app-tab-page">
+                        <header class="app-header-simple">
+                            <h1 class="page-title">Spending Analytics</h1>
+                            <div class="time-filter-toggle">
+                                <button class="btn-filter active">Week</button>
+                                <button class="btn-filter">Month</button>
+                                <button class="btn-filter">Year</button>
+                            </div>
+                        </header>
+
+                        <!-- ANALYTICS SVG CHART -->
+                        <section class="analytics-chart-card">
+                            <div class="chart-header">
+                                <div class="metric-pair">
+                                    <span class="metric-label">Average Spending</span>
+                                    <h3 class="metric-title">$342.45<span class="metric-sub-badge text-success">-8.2%</span></h3>
+                                </div>
+                                <div class="legend-color-row">
+                                    <span class="chart-legend-indicator cur-week"></span><span class="legend-lbl">This Period</span>
+                                    <span class="chart-legend-indicator prev-week"></span><span class="legend-lbl">Prev Period</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detailed SVG Line Graph -->
+                            <div class="svg-graph-container">
+                                <svg width="100%" height="200" viewBox="0 0 320 180" class="analytics-svg" preserveAspectRatio="none">
+                                    <!-- Grid Lines -->
+                                    <line x1="10" y1="20" x2="310" y2="20" stroke="#333" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="10" y1="70" x2="310" y2="70" stroke="#333" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="10" y1="120" x2="310" y2="120" stroke="#333" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="10" y1="160" x2="310" y2="160" stroke="#444" stroke-width="0.75"/>
+                                    
+                                    <!-- Previous Period Line (Muted secondary line) -->
+                                    <path d="M 20 150 L 70 120 L 120 145 L 170 85 L 220 90 L 270 60 L 300 40" fill="none" stroke="rgba(204,194,220,0.3)" stroke-width="2" stroke-dasharray="2 2" stroke-linecap="round"/>
+                                    
+                                    <!-- Main Line (Interactive Gradient overlay) -->
+                                    <path id="analytics-line-path" d="M 20 140 L 70 85 L 120 115 L 170 50 L 220 135 L 270 35 L 300 65" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="3" stroke-linecap="round"/>
+                                    
+                                    <!-- Interactive Dot Plot points -->
+                                    <circle cx="20" cy="140" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="70" cy="85" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="120" cy="115" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="170" cy="50" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="220" cy="135" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="270" cy="35" r="4" fill="var(--md-sys-color-primary)"/>
+                                    <circle cx="300" cy="65" r="4" fill="var(--md-sys-color-primary)"/>
+                                </svg>
+                                <div class="chart-x-axis">
+                                    <span>Mon</span>
+                                    <span>Tue</span>
+                                    <span>Wed</span>
+                                    <span>Thu</span>
+                                    <span>Fri</span>
+                                    <span>Sat</span>
+                                    <span>Sun</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- DETAILED BUDGET PROGRESS BARS -->
+                        <section class="budget-limits-section">
+                            <h2 class="section-title">Active Budget Caps</h2>
+                            
+                            <div class="budget-progress-card">
+                                <div class="budget-info-row">
+                                    <span class="budget-cat-name">Food & Dining</span>
+                                    <span class="budget-ratio"><strong>$848</strong> / $1,000</span>
+                                </div>
+                                <div class="progress-bar-back">
+                                    <div class="progress-bar-front warning" style="width: 84.8%"></div>
+                                </div>
+                                <p class="budget-alert-subtext"><span class="material-symbols-outlined icon-inline text-warning">warning</span> 85% of monthly budget reached.</p>
+                            </div>
+
+                            <div class="budget-progress-card">
+                                <div class="budget-info-row">
+                                    <span class="budget-cat-name">Shopping</span>
+                                    <span class="budget-ratio"><strong>$530</strong> / $1,200</span>
+                                </div>
+                                <div class="progress-bar-back">
+                                    <div class="progress-bar-front" style="width: 44.1%"></div>
+                                </div>
+                                <p class="budget-alert-subtext">Safe zone. $670 remaining.</p>
+                            </div>
+
+                            <div class="budget-progress-card">
+                                <div class="budget-info-row">
+                                    <span class="budget-cat-name">Travel</span>
+                                    <span class="budget-ratio"><strong>$318</strong> / $400</span>
+                                </div>
+                                <div class="progress-bar-back">
+                                    <div class="progress-bar-front danger" style="width: 79.5%"></div>
+                                </div>
+                                <p class="budget-alert-subtext">Approaching cap limit soon.</p>
+                            </div>
+                        </section>
+
+                        <div class="screen-spacer"></div>
+                    </div>
+
+                    <!-- TAB 4: PROFILE PAGE -->
+                    <div id="tab-profile" class="app-tab-page">
+                        <header class="app-header-profile">
+                            <div class="avatar-large-container">
+                                <div class="avatar-large">AP</div>
+                                <button class="btn-avatar-edit">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                            </div>
+                            <h1 class="profile-name">Abhishek Pillai</h1>
+                            <p class="profile-meta">Axe Platinum Member since 2024</p>
+                        </header>
+
+                        <!-- SECURITY & SETTINGS -->
+                        <section class="profile-settings-section">
+                            <h2 class="section-title">Account Settings</h2>
+                            
+                            <div class="settings-list">
+                                <div class="settings-item">
+                                    <span class="material-symbols-outlined settings-icon">shield_person</span>
+                                    <div class="settings-info">
+                                        <span class="settings-label">Security & Authentication</span>
+                                        <span class="settings-desc">Face ID, passcode changes</span>
+                                    </div>
+                                    <span class="material-symbols-outlined chevron">chevron_right</span>
+                                </div>
+
+                                <div class="settings-item">
+                                    <span class="material-symbols-outlined settings-icon">notifications_active</span>
+                                    <div class="settings-info">
+                                        <span class="settings-label">Push Notifications</span>
+                                        <span class="settings-desc">Alert configs, transactional alerts</span>
+                                    </div>
+                                    <span class="material-symbols-outlined chevron">chevron_right</span>
+                                </div>
+
+                                <div class="settings-item">
+                                    <span class="material-symbols-outlined settings-icon">payments</span>
+                                    <div class="settings-info">
+                                        <span class="settings-label">Linked External Accounts</span>
+                                        <span class="settings-desc">Manage Chase, Citibank cards</span>
+                                    </div>
+                                    <span class="material-symbols-outlined chevron">chevron_right</span>
+                                </div>
+
+                                <div class="settings-item">
+                                    <span class="material-symbols-outlined settings-icon">help</span>
+                                    <div class="settings-info">
+                                        <span class="settings-label">Help Desk & Live Chat</span>
+                                        <span class="settings-desc">24/7 dedicated bank support</span>
+                                    </div>
+                                    <span class="material-symbols-outlined chevron">chevron_right</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="screen-spacer"></div>
+                    </div>
+
+                </div>
+
+                <!-- ==================== APP BOTTOM NAVIGATION BAR ==================== -->
+                <nav class="app-nav-bar">
+                    <button class="nav-item active" data-tab="home">
+                        <div class="nav-icon-pill">
+                            <span class="material-symbols-outlined font-filled">home</span>
+                        </div>
+                        <span class="nav-label">Home</span>
+                    </button>
+                    <button class="nav-item" data-tab="cards">
+                        <div class="nav-icon-pill">
+                            <span class="material-symbols-outlined">credit_card</span>
+                        </div>
+                        <span class="nav-label">Cards</span>
+                    </button>
+                    <button class="nav-item" data-tab="analytics">
+                        <div class="nav-icon-pill">
+                            <span class="material-symbols-outlined">monitoring</span>
+                        </div>
+                        <span class="nav-label">Analytics</span>
+                    </button>
+                    <button class="nav-item" data-tab="profile">
+                        <div class="nav-icon-pill">
+                            <span class="material-symbols-outlined font-filled">person</span>
+                        </div>
+                        <span class="nav-label">Profile</span>
+                    </button>
+                </nav>
+
+                <!-- Phone Bottom Home Indicator Strip -->
+                <div class="phone-home-indicator"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== DYNAMIC BOTTOM SHEET / TRANSACTION DETAILS MODAL ==================== -->
+    <div class="bottom-sheet-overlay" id="tx-details-overlay" aria-hidden="true">
+        <div class="bottom-sheet-content">
+            <!-- Notch drag line -->
+            <div class="bottom-sheet-drag-handle"></div>
+            
+            <div class="bottom-sheet-header">
+                <h3 id="detail-category-badge" class="cat-badge">Category</h3>
+                <button class="btn-close-sheet" id="btn-close-tx-details" aria-label="Close details">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="bottom-sheet-body">
+                <div class="detail-merchant-logo" id="detail-logo-box">S</div>
+                <h2 id="detail-title" class="detail-merchant-name">Merchant Name</h2>
+                <p id="detail-timestamp" class="detail-time">Yesterday, 14:24</p>
+
+                <div class="detail-amount-box" id="detail-amount">-$12.50</div>
+
+                <div class="detail-meta-list">
+                    <div class="meta-row">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-val text-success">Completed</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Payment Method</span>
+                        <span class="meta-val" id="detail-payment-method">Axe Visa Card (*4309)</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Transaction ID</span>
+                        <span class="meta-val code-font" id="detail-tx-id">TXN-84093849-B</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Loyalty Points Earned</span>
+                        <span class="meta-val text-primary" id="detail-points">+12 Points</span>
+                    </div>
+                </div>
+
+                <button class="btn-action-full">Raise Dispute / Support</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
