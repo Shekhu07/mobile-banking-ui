@@ -309,6 +309,24 @@ h1, h2, h3, .balance-amount, .metric-value, .brand-name {
     transform: scale(1.1);
 }
 
+.card-design-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform var(--md-duration-short) var(--md-easing-standard);
+}
+
+.card-design-btn:hover {
+    transform: scale(1.1);
+}
+
+.card-design-btn.active {
+    border-color: var(--md-sys-color-on-background);
+    transform: scale(1.1);
+}
+
 .panel-footer {
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -1242,6 +1260,71 @@ h1, h2, h3, .balance-amount, .metric-value, .brand-name {
 .card-front {
     background: linear-gradient(135deg, #1b1625 0%, #0d0a12 100%);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.card-front.axe-black {
+    background: linear-gradient(135deg, #1b1625 0%, #0d0a12 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.card-front.axe-gold {
+    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%) !important;
+    border: 1px solid rgba(255, 215, 0, 0.5) !important;
+}
+
+.card-front.axe-gold .brand-name,
+.card-front.axe-gold .contactless-icon,
+.card-front.axe-gold .card-digits,
+.card-front.axe-gold .label-micro,
+.card-front.axe-gold .value-name {
+    color: #1a1308 !important;
+    text-shadow: none !important;
+    opacity: 0.9;
+}
+
+.card-front.axe-gold .card-chip {
+    background: linear-gradient(135deg, #333 0%, #000 100%) !important;
+}
+
+.card-front.axe-gold .card-network-logo .network-circle {
+    border: 1px solid #1a1308;
+}
+
+.card-front.midnight-carbon {
+    background: linear-gradient(135deg, #2c3e50 0%, #0f171e 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.8), 0 15px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+.card-front.midnight-carbon::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 4px);
+    pointer-events: none;
+}
+
+.card-front.emerald-jade {
+    background: linear-gradient(135deg, #093028 0%, #237a57 100%) !important;
+    border: 1px solid rgba(74, 201, 151, 0.4) !important;
+    box-shadow: 0 8px 32px 0 rgba(9, 48, 40, 0.4), 0 15px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+.card-front.holographic-glass {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.4) 0%, rgba(0, 242, 254, 0.4) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.card-front.holographic-glass .brand-name,
+.card-front.holographic-glass .contactless-icon,
+.card-front.holographic-glass .card-digits,
+.card-front.holographic-glass .label-micro,
+.card-front.holographic-glass .value-name {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* High end moving gloss hover reflection */
@@ -2162,6 +2245,298 @@ h1, h2, h3, .balance-amount, .metric-value, .brand-name {
         opacity: 0;
         margin-bottom: -60px;
     }
+}
+
+/* ==========================================================================
+   FEATURE 2: SEND MONEY TRANSFER STYLES
+   ========================================================================== */
+.contacts-scroll-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 8px 4px 12px 4px;
+    margin-bottom: 8px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.contacts-scroll-row::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.contact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    min-width: 60px;
+    transition: transform 0.2s ease;
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+}
+
+.contact-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.contact-card.active .contact-avatar {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    border-color: var(--md-sys-color-primary);
+}
+
+.contact-name {
+    font-size: 0.65rem;
+    color: var(--md-sys-color-on-surface-variant);
+    font-weight: 500;
+    text-align: center;
+}
+
+.contact-card.active .contact-name {
+    color: var(--md-sys-color-primary);
+    font-weight: 700;
+}
+
+.transfer-amount-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--md-sys-color-on-background);
+    padding: 12px 0;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+}
+
+.curr-symbol {
+    color: var(--md-sys-color-primary);
+    margin-right: 4px;
+}
+
+.custom-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.key-btn {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--md-sys-color-on-background);
+    border-radius: 12px;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.key-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.key-btn:active {
+    transform: scale(0.92);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.key-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Spinner and checkmark graphics */
+.processing-spinner-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.premium-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(208, 188, 255, 0.1);
+    border-top: 4px solid var(--md-sys-color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.success-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.success-check {
+    font-size: 64px;
+    color: var(--md-sys-color-success);
+    animation: scaleCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes scaleCheck {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   FEATURE 4: WALLET SWITCHER CAROUSEL STYLES
+   ========================================================================== */
+.wallet-carousel-section {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.wallet-carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.wallet-carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 4px 4px 16px 4px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.wallet-carousel::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.wallet-card {
+    flex: 0 0 250px;
+    height: 145px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    scroll-snap-align: start;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1.5px solid transparent;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.wallet-card:hover {
+    transform: translateY(-2px);
+}
+
+.wallet-card.active {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.wallet-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.85;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.wallet-card.active .wallet-card-bg {
+    opacity: 1;
+}
+
+.wallet-card-content {
+    position: relative;
+    z-index: 2;
+    padding: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #FFFFFF;
+}
+
+.wallet-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.wallet-balance-row {
+    display: flex;
+    align-items: baseline;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 8px 0;
+    letter-spacing: -0.5px;
+}
+
+.wallet-currency {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+.wallet-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    opacity: 0.9;
+}
+
+.wallet-acc-num {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.wallet-trend {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* ==========================================================================
+   FEATURE 5: INTERACTIVE CHART TOOLTIP STYLES
+   ========================================================================== */
+.chart-tooltip {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.9);
+}
+
+.chart-tooltip.active {
+    opacity: 1 !important;
+    transform: translate(-50%, -100%) scale(1) !important;
 }
 
 /* ==========================================================================

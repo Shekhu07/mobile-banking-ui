@@ -79,6 +79,23 @@
                 </div>
             </div>
 
+            <!-- Adjustable Budget Caps -->
+            <div class="control-section">
+                <h3>Adjust Budget Caps</h3>
+                <div class="input-group">
+                    <label for="sim-budget-food">Food & Dining Cap ($)</label>
+                    <input type="number" id="sim-budget-food" value="1000" step="100">
+                </div>
+                <div class="input-group">
+                    <label for="sim-budget-shopping">Shopping Cap ($)</label>
+                    <input type="number" id="sim-budget-shopping" value="1200" step="100">
+                </div>
+                <div class="input-group">
+                    <label for="sim-budget-travel">Travel Cap ($)</label>
+                    <input type="number" id="sim-budget-travel" value="400" step="50">
+                </div>
+            </div>
+
             <!-- Theme Accent Changer -->
             <div class="control-section">
                 <h3>Theme Accent Palette</h3>
@@ -87,6 +104,18 @@
                     <button class="color-btn" data-theme="emerald" style="background: linear-gradient(135deg, #A7F3D0, #34D399);"></button>
                     <button class="color-btn" data-theme="amber" style="background: linear-gradient(135deg, #FDE68A, #F59E0B);"></button>
                     <button class="color-btn" data-theme="ocean" style="background: linear-gradient(135deg, #93C5FD, #3B82F6);"></button>
+                </div>
+            </div>
+
+            <!-- Card Customizer -->
+            <div class="control-section">
+                <h3>Card Visual Design</h3>
+                <div class="color-palette-selector" id="card-design-selector">
+                    <button class="card-design-btn active" data-card-design="axe-black" title="Axe Black" style="background: linear-gradient(135deg, #1b1625, #0d0a12); border: 1px solid rgba(255,255,255,0.2);"></button>
+                    <button class="card-design-btn" data-card-design="axe-gold" title="Axe Gold" style="background: linear-gradient(135deg, #bf953f, #aa771c); border: 1px solid #ffd700;"></button>
+                    <button class="card-design-btn" data-card-design="midnight-carbon" title="Midnight Carbon" style="background: linear-gradient(135deg, #2c3e50, #0f171e); border: 1px solid #444;"></button>
+                    <button class="card-design-btn" data-card-design="emerald-jade" title="Emerald Jade" style="background: linear-gradient(135deg, #093028, #237a57); border: 1px solid #4caf50;"></button>
+                    <button class="card-design-btn" data-card-design="holographic-glass" title="Holographic Glass" style="background: linear-gradient(135deg, #4facfe, #00f2fe); border: 1px solid rgba(255,255,255,0.4);"></button>
                 </div>
             </div>
             
@@ -126,12 +155,12 @@
                         <header class="app-header">
                             <div class="user-profile">
                                 <div class="avatar-container">
-                                    <div class="avatar-img">AP</div>
+                                    <div class="avatar-img">SV</div>
                                     <div class="status-dot"></div>
                                 </div>
                                 <div class="welcome-text">
                                     <p class="greeting-subtitle">Welcome back</p>
-                                    <h1 class="greeting-title">Abhishek Pillai</h1>
+                                    <h1 class="greeting-title">Sophia Vance</h1>
                                 </div>
                             </div>
                             <div class="header-actions">
@@ -148,43 +177,103 @@
                             <input type="text" id="transaction-search" placeholder="Search transactions, bills, contacts...">
                         </div>
 
-                        <!-- OVERALL SUMMARY CARD -->
-                        <section class="financial-summary-card">
-                            <div class="card-bg-gradient"></div>
-                            <div class="card-content">
-                                <div class="card-header-row">
-                                    <span class="card-label">Total Balance</span>
-                                    <button class="btn-text-icon" id="toggle-balance-visibility" aria-label="Hide balance">
-                                        <span class="material-symbols-outlined" id="balance-eye-icon">visibility</span>
-                                    </button>
-                                </div>
-                                <div class="balance-display-row">
-                                    <span class="currency-symbol">$</span>
-                                    <span class="balance-amount" id="main-balance-val">12,450.80</span>
-                                </div>
-                                
-                                <div class="cash-flow-summary">
-                                    <div class="flow-item income">
-                                        <span class="material-symbols-outlined arrow-icon">arrow_downward</span>
-                                        <div class="flow-details">
-                                            <span class="flow-label">Income</span>
-                                            <span class="flow-value" id="income-val">+$5,840.00</span>
+                        <!-- SWIPEABLE WALLET CAROUSEL -->
+                        <section class="wallet-carousel-section">
+                            <div class="wallet-carousel-header">
+                                <h2 class="section-title">My Accounts</h2>
+                                <button class="btn-text-icon" id="toggle-balance-visibility" aria-label="Hide balance">
+                                    <span class="material-symbols-outlined" id="balance-eye-icon">visibility</span>
+                                </button>
+                            </div>
+                            <div class="wallet-carousel" id="wallet-carousel-container">
+                                <!-- Wallet 1: Checking -->
+                                <div class="wallet-card active" data-wallet="checking">
+                                    <div class="wallet-card-bg" style="background: linear-gradient(135deg, #7A5CFF, #4F2BE8);"></div>
+                                    <div class="wallet-card-content">
+                                        <span class="wallet-label">Checking Account</span>
+                                        <div class="wallet-balance-row">
+                                            <span class="wallet-currency">$</span>
+                                            <span class="wallet-balance-amount" id="main-balance-val">12,450.80</span>
                                         </div>
-                                    </div>
-                                    <div class="divider-vertical"></div>
-                                    <div class="flow-item expense">
-                                        <span class="material-symbols-outlined arrow-icon">arrow_upward</span>
-                                        <div class="flow-details">
-                                            <span class="flow-label">Expenses</span>
-                                            <span class="flow-value" id="expenses-val">-$2,120.45</span>
+                                        <div class="wallet-footer">
+                                            <span class="wallet-acc-num">•••• 8421</span>
+                                            <span class="wallet-trend text-success"><span class="material-symbols-outlined icon-inline" style="font-size: 14px;">trending_up</span> Primary</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="quick-cash-flow-bar">
-                                    <div class="flow-fill-income" style="width: 73.4%"></div>
-                                    <div class="flow-fill-expense" style="width: 26.6%"></div>
+                                <!-- Wallet 2: Savings -->
+                                <div class="wallet-card" data-wallet="savings">
+                                    <div class="wallet-card-bg" style="background: linear-gradient(135deg, #00B4DB, #0083B0);"></div>
+                                    <div class="wallet-card-content">
+                                        <span class="wallet-label">Savings Target</span>
+                                        <div class="wallet-balance-row">
+                                            <span class="wallet-currency">$</span>
+                                            <span class="wallet-balance-amount" data-wallet-val="savings">8,500.00</span>
+                                        </div>
+                                        <div class="wallet-footer">
+                                            <span class="wallet-acc-num">Goal: $15,000</span>
+                                            <span class="wallet-trend text-primary" style="color: #FFF !important;"><span class="material-symbols-outlined icon-inline" style="font-size: 14px;">savings</span> 56% Reached</span>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Wallet 3: Investments -->
+                                <div class="wallet-card" data-wallet="investments">
+                                    <div class="wallet-card-bg" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></div>
+                                    <div class="wallet-card-content">
+                                        <span class="wallet-label">Investment Portfolio</span>
+                                        <div class="wallet-balance-row">
+                                            <span class="wallet-currency">$</span>
+                                            <span class="wallet-balance-amount" data-wallet-val="investments">24,300.00</span>
+                                        </div>
+                                        <div class="wallet-footer">
+                                            <span class="wallet-acc-num">Equity & Bonds</span>
+                                            <span class="wallet-trend text-success" style="color: #FFF !important;"><span class="material-symbols-outlined icon-inline" style="font-size: 14px;">arrow_drop_up</span> +12.4%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Wallet 4: Crypto -->
+                                <div class="wallet-card" data-wallet="crypto">
+                                    <div class="wallet-card-bg" style="background: linear-gradient(135deg, #f857a6, #ff5858);"></div>
+                                    <div class="wallet-card-content">
+                                        <span class="wallet-label">Crypto Wallet</span>
+                                        <div class="wallet-balance-row">
+                                            <span class="wallet-currency">$</span>
+                                            <span class="wallet-balance-amount" data-wallet-val="crypto">4,850.50</span>
+                                        </div>
+                                        <div class="wallet-footer">
+                                            <span class="wallet-acc-num">BTC & ETH</span>
+                                            <span class="wallet-trend text-danger" style="color: #FFF !important;"><span class="material-symbols-outlined icon-inline" style="font-size: 14px;">arrow_drop_down</span> -2.5%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- CASH FLOW SUMMARY SECTION -->
+                        <section class="cash-flow-section" style="margin-bottom: 24px;">
+                            <div class="cash-flow-summary" style="background-color: var(--md-sys-color-surface); border-radius: 20px; border: 1px solid rgba(255,255,255,0.04); padding: 16px;">
+                                <div class="flow-item income">
+                                    <span class="material-symbols-outlined arrow-icon">arrow_downward</span>
+                                    <div class="flow-details">
+                                        <span class="flow-label">Income</span>
+                                        <span class="flow-value" id="income-val">+$5,840.00</span>
+                                    </div>
+                                </div>
+                                <div class="divider-vertical"></div>
+                                <div class="flow-item expense">
+                                    <span class="material-symbols-outlined arrow-icon">arrow_upward</span>
+                                    <div class="flow-details">
+                                        <span class="flow-label">Expenses</span>
+                                        <span class="flow-value" id="expenses-val">-$2,120.45</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="quick-cash-flow-bar" style="margin-top: 8px;">
+                                <div class="flow-fill-income" style="width: 73.4%"></div>
+                                <div class="flow-fill-expense" style="width: 26.6%"></div>
                             </div>
                         </section>
 
@@ -404,7 +493,7 @@
                                     <div class="card-bottom">
                                         <div class="card-holder-info">
                                             <span class="label-micro">CARDHOLDER</span>
-                                            <span class="value-name">ABHISHEK PILLAI</span>
+                                            <span class="value-name">SOPHIA VANCE</span>
                                         </div>
                                         <div class="card-expiry-info">
                                             <span class="label-micro">EXPIRES</span>
@@ -502,9 +591,14 @@
                                     <span class="metric-label">Average Spending</span>
                                     <h3 class="metric-title">$342.45<span class="metric-sub-badge text-success">-8.2%</span></h3>
                                 </div>
-                                <div class="legend-color-row">
-                                    <span class="chart-legend-indicator cur-week"></span><span class="legend-lbl">This Period</span>
-                                    <span class="chart-legend-indicator prev-week"></span><span class="legend-lbl">Prev Period</span>
+                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                                    <div class="legend-color-row">
+                                        <span class="chart-legend-indicator cur-week"></span><span class="legend-lbl">This Period</span>
+                                        <span class="chart-legend-indicator prev-week"></span><span class="legend-lbl">Prev Period</span>
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: var(--md-sys-color-on-surface-variant); cursor: pointer;">
+                                        <input type="checkbox" id="toggle-prediction" style="accent-color: var(--md-sys-color-primary);"> AI Projection
+                                    </label>
                                 </div>
                             </div>
                             
@@ -520,6 +614,9 @@
                                     <!-- Previous Period Line (Muted secondary line) -->
                                     <path d="M 20 150 L 70 120 L 120 145 L 170 85 L 220 90 L 270 60 L 300 40" fill="none" stroke="rgba(204,194,220,0.3)" stroke-width="2" stroke-dasharray="2 2" stroke-linecap="round"/>
                                     
+                                    <!-- Predictive AI Line (Dashed) -->
+                                    <path id="prediction-line-path" d="M 300 65 L 310 50 L 320 40" fill="none" stroke="var(--md-sys-color-secondary)" stroke-width="2.5" stroke-dasharray="4 4" style="display: none;"/>
+
                                     <!-- Main Line (Interactive Gradient overlay) -->
                                     <path id="analytics-line-path" d="M 20 140 L 70 85 L 120 115 L 170 50 L 220 135 L 270 35 L 300 65" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="3" stroke-linecap="round"/>
                                     
@@ -531,6 +628,21 @@
                                     <circle cx="220" cy="135" r="4" fill="var(--md-sys-color-primary)"/>
                                     <circle cx="270" cy="35" r="4" fill="var(--md-sys-color-primary)"/>
                                     <circle cx="300" cy="65" r="4" fill="var(--md-sys-color-primary)"/>
+
+                                    <!-- Focus indicator elements -->
+                                    <line id="chart-focus-line" x1="0" y1="0" x2="0" y2="180" stroke="rgba(255,255,255,0.15)" stroke-width="1" style="display: none; pointer-events: none;"/>
+                                    <circle id="chart-focus-dot" cx="0" cy="0" r="6" fill="var(--md-sys-color-primary)" stroke="#FFF" stroke-width="1.5" style="display: none; pointer-events: none;"/>
+
+                                    <!-- Interaction Columns -->
+                                    <g class="chart-interaction-cols">
+                                        <rect class="chart-col-trigger" data-day="Monday" data-spent="140.00" data-x="20" data-y="140" x="5" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Tuesday" data-spent="85.50" data-x="70" data-y="85" x="55" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Wednesday" data-spent="115.00" data-x="120" data-y="115" x="105" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Thursday" data-spent="50.25" data-x="170" data-y="50" x="155" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Friday" data-spent="135.80" data-x="220" data-y="135" x="205" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Saturday" data-spent="35.00" data-x="270" data-y="35" x="255" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                        <rect class="chart-col-trigger" data-day="Sunday" data-spent="65.40" data-x="300" data-y="65" x="285" y="0" width="30" height="180" fill="transparent" style="cursor: pointer;"/>
+                                    </g>
                                 </svg>
                                 <div class="chart-x-axis">
                                     <span>Mon</span>
@@ -540,6 +652,12 @@
                                     <span>Fri</span>
                                     <span>Sat</span>
                                     <span>Sun</span>
+                                </div>
+
+                                <!-- Floating Tooltip HTML Overlay -->
+                                <div class="chart-tooltip" id="chart-tooltip-el" style="display: none; position: absolute; pointer-events: none; background: rgba(30, 27, 38, 0.95); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 10px; font-size: 0.65rem; color: #FFF; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 10; display: flex; flex-direction: column; gap: 2px;">
+                                    <span class="tooltip-day" style="font-weight: 500; opacity: 0.8;">Mon</span>
+                                    <span class="tooltip-amount" style="font-weight: 700; color: var(--md-sys-color-primary); font-size: 0.75rem;">$0.00</span>
                                 </div>
                             </div>
                         </section>
@@ -589,12 +707,12 @@
                     <div id="tab-profile" class="app-tab-page">
                         <header class="app-header-profile">
                             <div class="avatar-large-container">
-                                <div class="avatar-large">AP</div>
+                                <div class="avatar-large">SV</div>
                                 <button class="btn-avatar-edit">
                                     <span class="material-symbols-outlined">edit</span>
                                 </button>
                             </div>
-                            <h1 class="profile-name">Abhishek Pillai</h1>
+                            <h1 class="profile-name">Sophia Vance</h1>
                             <p class="profile-meta">Axe Platinum Member since 2024</p>
                         </header>
 
@@ -720,6 +838,109 @@
                 </div>
 
                 <button class="btn-action-full">Raise Dispute / Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DYNAMIC BOTTOM SHEET / TRANSFER MONEY MODAL ==================== -->
+    <div class="bottom-sheet-overlay" id="transfer-money-overlay" aria-hidden="true">
+        <div class="bottom-sheet-content">
+            <!-- Notch drag line -->
+            <div class="bottom-sheet-drag-handle"></div>
+            
+            <div class="bottom-sheet-header">
+                <h3 class="cat-badge">SEND MONEY</h3>
+                <button class="btn-close-sheet" id="btn-close-transfer" aria-label="Close transfer">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Multi-step body container -->
+            <div class="bottom-sheet-body" id="transfer-modal-body">
+                
+                <!-- Step 1: Select Contact & Amount -->
+                <div class="transfer-step active" id="transfer-step-1">
+                    <h2 class="detail-merchant-name" style="margin-top: 10px;">Select Recipient</h2>
+                    <!-- Contact horizontal scroll -->
+                    <div class="contacts-scroll-row">
+                        <div class="contact-card active" data-contact="Alice Smith" data-initials="AS">
+                            <div class="contact-avatar">AS</div>
+                            <span class="contact-name">Alice S.</span>
+                        </div>
+                        <div class="contact-card" data-contact="Bob Jones" data-initials="BJ">
+                            <div class="contact-avatar">BJ</div>
+                            <span class="contact-name">Bob J.</span>
+                        </div>
+                        <div class="contact-card" data-contact="Carol White" data-initials="CW">
+                            <div class="contact-avatar">CW</div>
+                            <span class="contact-name">Carol W.</span>
+                        </div>
+                        <div class="contact-card" data-contact="David Green" data-initials="DG">
+                            <div class="contact-avatar">DG</div>
+                            <span class="contact-name">David G.</span>
+                        </div>
+                    </div>
+                    
+                    <h2 class="detail-merchant-name" style="margin-top: 20px;">Enter Amount</h2>
+                    <!-- Dynamic numerical input display -->
+                    <div class="transfer-amount-display">
+                        <span class="curr-symbol">$</span>
+                        <span id="transfer-amount-val">0.00</span>
+                    </div>
+
+                    <!-- Custom keypad -->
+                    <div class="custom-keypad">
+                        <button class="key-btn" data-val="1">1</button>
+                        <button class="key-btn" data-val="2">2</button>
+                        <button class="key-btn" data-val="3">3</button>
+                        <button class="key-btn" data-val="4">4</button>
+                        <button class="key-btn" data-val="5">5</button>
+                        <button class="key-btn" data-val="6">6</button>
+                        <button class="key-btn" data-val="7">7</button>
+                        <button class="key-btn" data-val="8">8</button>
+                        <button class="key-btn" data-val="9">9</button>
+                        <button class="key-btn" data-val=".">.</button>
+                        <button class="key-btn" data-val="0">0</button>
+                        <button class="key-btn" data-val="backspace"><span class="material-symbols-outlined">backspace</span></button>
+                    </div>
+
+                    <button class="btn-action-full" id="btn-confirm-transfer" style="margin-top: 15px;">Continue</button>
+                </div>
+
+                <!-- Step 2: Processing state -->
+                <div class="transfer-step" id="transfer-step-processing" style="display: none; text-align: center; padding: 40px 20px;">
+                    <div class="processing-spinner-box">
+                        <div class="premium-spinner"></div>
+                    </div>
+                    <h2 class="detail-merchant-name" style="margin-top: 20px;">Verifying Transfer...</h2>
+                    <p style="color: var(--md-sys-color-on-surface-variant); font-size: 0.8rem; margin-top: 8px;">Securing transaction via Axe Protocol.</p>
+                </div>
+
+                <!-- Step 3: Success checkmark state -->
+                <div class="transfer-step" id="transfer-step-success" style="display: none; text-align: center; padding: 30px 20px;">
+                    <div class="success-icon-box">
+                        <span class="material-symbols-outlined success-check">check_circle</span>
+                    </div>
+                    <h2 class="detail-merchant-name" style="margin-top: 20px; color: var(--md-sys-color-success);">Transfer Successful!</h2>
+                    <p style="color: var(--md-sys-color-on-surface-variant); font-size: 0.8rem; margin-top: 8px;" id="transfer-success-msg">Sent $0.00 to Alice Smith</p>
+                    
+                    <div class="receipt-box" style="margin: 20px 0; background: rgba(255,255,255,0.02); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.04); text-align: left;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px;">
+                            <span style="color: var(--md-sys-color-on-surface-variant)">Recipient</span>
+                            <span id="receipt-recipient" style="font-weight: 600">Alice Smith</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px;">
+                            <span style="color: var(--md-sys-color-on-surface-variant)">Amount Sent</span>
+                            <span id="receipt-amount" style="font-weight: 700; color: var(--md-sys-color-primary)">$0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span style="color: var(--md-sys-color-on-surface-variant)">Transaction ID</span>
+                            <span id="receipt-txid" class="code-font">TXN-000000-S</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-action-full" id="btn-close-success" style="margin-top: 10px;">Done</button>
+                </div>
             </div>
         </div>
     </div>

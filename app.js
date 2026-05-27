@@ -10,6 +10,47 @@ const state = {
     limit: 2500,
     isBalanceHidden: false,
     theme: 'default',
+    cardDesign: 'axe-black',
+    budgets: {
+        food: 1000,
+        shopping: 1200,
+        travel: 400
+    },
+    activeWallet: 'checking',
+    wallets: {
+        checking: {
+            name: 'Checking Account',
+            balance: 12450.80,
+            accNum: '•••• 8421',
+            status: 'Primary',
+            trendClass: 'text-success',
+            trendIcon: 'trending_up'
+        },
+        savings: {
+            name: 'Savings Target',
+            balance: 8500.00,
+            accNum: 'Goal: $15,000',
+            status: '56% Reached',
+            trendClass: 'text-primary',
+            trendIcon: 'savings'
+        },
+        investments: {
+            name: 'Investment Portfolio',
+            balance: 24300.00,
+            accNum: 'Equity & Bonds',
+            status: '+12.4%',
+            trendClass: 'text-success',
+            trendIcon: 'arrow_drop_up'
+        },
+        crypto: {
+            name: 'Crypto Wallet',
+            balance: 4850.50,
+            accNum: 'BTC & ETH',
+            status: '-2.5%',
+            trendClass: 'text-danger',
+            trendIcon: 'arrow_drop_down'
+        }
+    },
     transactions: [
         {
             id: 'TXN-940384-H',
@@ -20,7 +61,8 @@ const state = {
             logo: '☕',
             method: 'Axe Visa Card (*4309)',
             status: 'Completed',
-            points: 6
+            points: 6,
+            wallet: 'checking'
         },
         {
             id: 'TXN-850293-K',
@@ -31,7 +73,8 @@ const state = {
             logo: '🛒',
             method: 'Axe Visa Card (*4309)',
             status: 'Completed',
-            points: 70
+            points: 70,
+            wallet: 'checking'
         },
         {
             id: 'TXN-382940-L',
@@ -42,7 +85,8 @@ const state = {
             logo: '💼',
             method: 'Axe Direct Deposit',
             status: 'Completed',
-            points: 150
+            points: 150,
+            wallet: 'checking'
         },
         {
             id: 'TXN-104928-Q',
@@ -53,7 +97,8 @@ const state = {
             logo: '🎯',
             method: 'Axe Visa Card (*4309)',
             status: 'Completed',
-            points: 45
+            points: 45,
+            wallet: 'checking'
         },
         {
             id: 'TXN-839201-P',
@@ -64,7 +109,8 @@ const state = {
             logo: '⚡',
             method: 'Axe Checking Account',
             status: 'Completed',
-            points: 0
+            points: 0,
+            wallet: 'checking'
         },
         {
             id: 'TXN-294018-T',
@@ -75,7 +121,44 @@ const state = {
             logo: '🚗',
             method: 'Axe Visa Card (*4309)',
             status: 'Completed',
-            points: 12
+            points: 12,
+            wallet: 'checking'
+        },
+        {
+            id: 'TXN-492049-M',
+            title: 'Coinbase Buy BTC',
+            category: 'shopping',
+            amount: -250.00,
+            timestamp: 'May 12, 11:20 AM',
+            logo: '🪙',
+            method: 'Crypto Wallet',
+            status: 'Completed',
+            points: 125,
+            wallet: 'crypto'
+        },
+        {
+            id: 'TXN-739281-W',
+            title: 'Dividend (Vanguard S&P 500)',
+            category: 'salary',
+            amount: 45.00,
+            timestamp: 'May 10, 09:30 AM',
+            logo: '📈',
+            method: 'Brokerage Settlement',
+            status: 'Completed',
+            points: 22,
+            wallet: 'investments'
+        },
+        {
+            id: 'TXN-182931-S',
+            title: 'Weekly Automated Deposit',
+            category: 'salary',
+            amount: 50.00,
+            timestamp: 'May 08, 08:00 AM',
+            logo: '🐷',
+            method: 'Axe Checking Link',
+            status: 'Completed',
+            points: 10,
+            wallet: 'savings'
         }
     ]
 };
@@ -125,6 +208,22 @@ const limitBadgeVal = document.getElementById('limit-badge-val');
 // Notification Tray
 const notificationTray = document.getElementById('notification-tray');
 
+// Transfer Modal Elements
+const transferMoneyOverlay = document.getElementById('transfer-money-overlay');
+const btnCloseTransfer = document.getElementById('btn-close-transfer');
+const btnConfirmTransfer = document.getElementById('btn-confirm-transfer');
+const btnCloseSuccess = document.getElementById('btn-close-success');
+const transferAmountVal = document.getElementById('transfer-amount-val');
+const transferStep1 = document.getElementById('transfer-step-1');
+const transferStepProcessing = document.getElementById('transfer-step-processing');
+const transferStepSuccess = document.getElementById('transfer-step-success');
+const transferSuccessMsg = document.getElementById('transfer-success-msg');
+const receiptRecipient = document.getElementById('receipt-recipient');
+const receiptAmount = document.getElementById('receipt-amount');
+const receiptTxId = document.getElementById('receipt-txid');
+const contactCards = document.querySelectorAll('.contact-card');
+const keypadBtns = document.querySelectorAll('.custom-keypad .key-btn');
+
 // ==========================================================================
 // CORE UI FUNCTIONS
 // ==========================================================================
@@ -154,24 +253,36 @@ updateClock();
 
 // Re-render and calculate financials
 function updateFinancialDashboard() {
+    // Sync balance values in the carousel UI elements
+    Object.keys(state.wallets).forEach(wKey => {
+        const balEl = document.querySelector(`.wallet-card[data-wallet="${wKey}"] .wallet-balance-amount`);
+        if (balEl) {
+            balEl.textContent = formatCurrency(state.wallets[wKey].balance);
+        }
+    });
+
+    const activeW = state.wallets[state.activeWallet];
+
     // 1. Balance Display
     if (state.isBalanceHidden) {
         mainBalanceEl.textContent = '••••••';
         balanceEyeIcon.textContent = 'visibility_off';
     } else {
-        mainBalanceEl.textContent = formatCurrency(state.balance);
+        mainBalanceEl.textContent = formatCurrency(activeW.balance);
         balanceEyeIcon.textContent = 'visibility';
     }
 
-    // 2. Income/Expense Totals from transaction history
+    // 2. Income/Expense Totals from transaction history of ACTIVE wallet
     let totalIncome = 0;
     let totalExpenses = 0;
     
     state.transactions.forEach(tx => {
-        if (tx.amount > 0) {
-            totalIncome += tx.amount;
-        } else {
-            totalExpenses += Math.abs(tx.amount);
+        if (tx.wallet === state.activeWallet) {
+            if (tx.amount > 0) {
+                totalIncome += tx.amount;
+            } else {
+                totalExpenses += Math.abs(tx.amount);
+            }
         }
     });
 
@@ -195,17 +306,24 @@ function updateFinancialDashboard() {
 
     // 3. Savings Goal Metric Circular Chart
     const target = state.savingsTarget;
-    const pct = Math.min(Math.round((state.balance / target) * 100), 100);
+    const currentSavings = state.wallets.savings.balance;
+    const pct = Math.min(Math.round((currentSavings / target) * 100), 100);
     savingsProgressText.textContent = `${pct}%`;
     // circle radius r=15.9155 has circumference of exactly 100, stroke-dasharray pattern is stroke, gap
     savingsProgressRing.setAttribute('stroke-dasharray', `${pct}, 100`);
+
+    // Update savings percentage text in wallet card footer
+    const savingsTrendText = document.querySelector('.wallet-card[data-wallet="savings"] .wallet-trend');
+    if (savingsTrendText) {
+        savingsTrendText.innerHTML = `<span class="material-symbols-outlined icon-inline" style="font-size: 14px;">savings</span> ${pct}% Reached`;
+    }
 
     // 4. Update Spending Doughnut chart breakdown
     updateSpendingBreakdownChart(totalExpenses);
 
     // 5. Update UI values in the Simulator inputs if they are not active
     if (document.activeElement !== simBalanceInput) {
-        simBalanceInput.value = state.balance.toFixed(2);
+        simBalanceInput.value = activeW.balance.toFixed(2);
     }
 }
 
@@ -219,7 +337,7 @@ function updateSpendingBreakdownChart(totalExpenses) {
     };
 
     state.transactions.forEach(tx => {
-        if (tx.amount < 0 && categories[tx.category] !== undefined) {
+        if (tx.wallet === state.activeWallet && tx.amount < 0 && categories[tx.category] !== undefined) {
             categories[tx.category] += Math.abs(tx.amount);
         }
     });
@@ -280,11 +398,7 @@ function updateSpendingBreakdownChart(totalExpenses) {
 
 // Update budget progress cards on analytics tab
 function updateAnalyticsScreenBudgets(categories) {
-    const caps = {
-        food: 1000,
-        shopping: 1200,
-        travel: 400
-    };
+    const caps = state.budgets;
 
     // Update Food limit
     const foodRatioText = document.querySelector('.budget-limits-section .budget-progress-card:nth-child(1) .budget-ratio');
@@ -350,7 +464,9 @@ function renderTransactions(filterQuery = '') {
     const q = filterQuery.toLowerCase().trim();
 
     const filtered = state.transactions.filter(tx => {
-        return tx.title.toLowerCase().includes(q) || tx.category.toLowerCase().includes(q);
+        const matchesWallet = tx.wallet === state.activeWallet;
+        const matchesQuery = tx.title.toLowerCase().includes(q) || tx.category.toLowerCase().includes(q);
+        return matchesWallet && matchesQuery;
     });
 
     if (filtered.length === 0) {
@@ -470,7 +586,9 @@ document.querySelectorAll('.app-nav-bar .nav-item').forEach(btn => {
 
 // Quick action link dispatcher
 window.quickAction = function(action) {
-    if (action === 'send' || action === 'scan' || action === 'bills' || action === 'vault') {
+    if (action === 'send') {
+        openTransferModal();
+    } else if (action === 'scan' || action === 'bills' || action === 'vault') {
         showToast('Info', `Starting: ${action.toUpperCase()} workflow simulation.`, false);
     } else if (action === 'more') {
         showToast('Info', 'Full widget catalogue loaded inside mobile memory.', false);
@@ -481,6 +599,178 @@ window.quickAction = function(action) {
 };
 
 window.switchTab = switchTab; // Expose globally for quick action cards link
+
+// ==========================================================================
+// FEATURE 2: TRANSFER MODAL STATE & FUNCTIONS
+// ==========================================================================
+let transferState = {
+    recipient: 'Alice Smith',
+    amountStr: '0.00'
+};
+
+function openTransferModal() {
+    transferState.recipient = 'Alice Smith';
+    transferState.amountStr = '0.00';
+    transferAmountVal.textContent = '0.00';
+    
+    // Reset contact UI selection
+    contactCards.forEach((c, idx) => {
+        if (idx === 0) c.classList.add('active');
+        else c.classList.remove('active');
+    });
+    
+    // Reset steps UI visibility
+    transferStep1.style.display = 'block';
+    transferStepProcessing.style.display = 'none';
+    transferStepSuccess.style.display = 'none';
+    
+    // Open sheet
+    transferMoneyOverlay.classList.add('active');
+    transferMoneyOverlay.setAttribute('aria-hidden', 'false');
+}
+
+function closeTransferModal() {
+    transferMoneyOverlay.classList.remove('active');
+    transferMoneyOverlay.setAttribute('aria-hidden', 'true');
+}
+
+// Contact selection
+contactCards.forEach(card => {
+    card.addEventListener('click', () => {
+        contactCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        transferState.recipient = card.getAttribute('data-contact');
+    });
+});
+
+// Keypad handler
+keypadBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-val');
+        let current = transferState.amountStr;
+        
+        if (val === 'backspace') {
+            if (current.length > 0) {
+                current = current.slice(0, -1);
+            }
+            if (current === '' || current === '-') {
+                current = '0.00';
+            }
+        } else if (val === '.') {
+            if (!current.includes('.')) {
+                if (current === '0.00' || current === '') {
+                    current = '0.';
+                } else {
+                    current += '.';
+                }
+            }
+        } else {
+            // Number pressed
+            if (current === '0.00') {
+                current = val;
+            } else {
+                // Limit to two decimal places
+                const dotIdx = current.indexOf('.');
+                if (dotIdx === -1 || current.length - dotIdx <= 2) {
+                    current += val;
+                }
+            }
+        }
+        
+        transferState.amountStr = current;
+        transferAmountVal.textContent = current;
+    });
+});
+
+// Confirm transfer (processing -> success)
+btnConfirmTransfer.addEventListener('click', () => {
+    const amt = parseFloat(transferState.amountStr);
+    if (isNaN(amt) || amt <= 0) {
+        alert('Please enter a valid amount to send.');
+        return;
+    }
+    
+    // Wallet switcher checks balance dynamically
+    let currentBalance = state.balance;
+    if (state.activeWallet && state.wallets) {
+        currentBalance = state.wallets[state.activeWallet].balance;
+    }
+    
+    if (amt > currentBalance) {
+        showToast('Insufficient Funds', `You cannot send $${amt.toFixed(2)}: exceeds available balance.`, true);
+        return;
+    }
+    
+    if (amt > state.limit) {
+        showToast('Limit Exceeded', `Your daily transaction limit is set to $${state.limit.toLocaleString()}.`, true);
+        return;
+    }
+    
+    // Hide inputs, show spinner
+    transferStep1.style.display = 'none';
+    transferStepProcessing.style.display = 'block';
+    
+    // Simulate transaction processing delay
+    setTimeout(() => {
+        // Subtract from active wallet balance or global balance
+        if (state.activeWallet && state.wallets) {
+            state.wallets[state.activeWallet].balance -= amt;
+            // Sync global balance representation
+            state.balance = state.wallets[state.activeWallet].balance;
+        } else {
+            state.balance -= amt;
+        }
+        
+        // Generate Transaction ID
+        const txId = `TXN-${Math.floor(100000 + Math.random() * 900000)}-S`;
+        
+        // Add new debit transaction
+        const newTx = {
+            id: txId,
+            title: `To ${transferState.recipient}`,
+            category: 'travel',
+            amount: -amt,
+            timestamp: 'Just now',
+            logo: '💸',
+            method: 'Axe Checking Account',
+            status: 'Completed',
+            points: Math.round(amt * 0.1), // 10% points
+            wallet: state.activeWallet || 'checking'
+        };
+        
+        state.transactions.unshift(newTx);
+        
+        // Refresh Dashboard
+        updateFinancialDashboard();
+        renderTransactions(searchInput.value);
+        
+        // Update success receipts
+        transferSuccessMsg.textContent = `Sent $${formatCurrency(amt)} to ${transferState.recipient}`;
+        receiptRecipient.textContent = transferState.recipient;
+        receiptAmount.textContent = `$${formatCurrency(amt)}`;
+        receiptTxId.textContent = txId;
+        
+        // Toggle steps
+        transferStepProcessing.style.display = 'none';
+        transferStepSuccess.style.display = 'block';
+        
+        showToast('Transfer Completed', `Successfully sent $${amt.toFixed(2)} to ${transferState.recipient}`, false);
+        
+        // Trigger Budget Cap Warning check (stubbed for Feature 3)
+        if (typeof checkBudgetExceededAlerts === 'function') {
+            checkBudgetExceededAlerts('travel', amt);
+        }
+    }, 1500);
+});
+
+// Close buttons
+btnCloseTransfer.addEventListener('click', closeTransferModal);
+btnCloseSuccess.addEventListener('click', closeTransferModal);
+transferMoneyOverlay.addEventListener('click', (e) => {
+    if (e.target === transferMoneyOverlay) {
+        closeTransferModal();
+    }
+});
 
 // ==========================================================================
 // CREDIT CARD INTERACTION AND CONTROLS
@@ -565,6 +855,7 @@ window.triggerAlert = function(alertType) {
 simBalanceInput.addEventListener('change', (e) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val) && val >= 0) {
+        state.wallets[state.activeWallet].balance = val;
         state.balance = val;
         updateFinancialDashboard();
     }
@@ -593,9 +884,10 @@ btnAddTx.addEventListener('click', () => {
 
     const transactionAmount = type === 'debit' ? -amountVal : amountVal;
 
-    // Adjust global balance immediately
-    state.balance += transactionAmount;
-    if (state.balance < 0) state.balance = 0; // prevent negative balance for display simplicity
+    // Adjust active wallet balance immediately
+    state.wallets[state.activeWallet].balance += transactionAmount;
+    if (state.wallets[state.activeWallet].balance < 0) state.wallets[state.activeWallet].balance = 0;
+    state.balance = state.wallets[state.activeWallet].balance;
 
     // Generate simulated logs
     const newTx = {
@@ -607,7 +899,8 @@ btnAddTx.addEventListener('click', () => {
         logo: getCategoryEmoji(category),
         method: type === 'debit' ? 'Axe Visa Card (*4309)' : 'Axe Electronic Deposit',
         status: 'Completed',
-        points: Math.max(1, Math.round(amountVal * 0.5))
+        points: Math.max(1, Math.round(amountVal * 0.5)),
+        wallet: state.activeWallet
     };
 
     // Add to beginning of transaction database
@@ -623,6 +916,11 @@ btnAddTx.addEventListener('click', () => {
 
     // Play successful notification
     showToast('Transaction Processed', `${newTx.title}: ${transactionAmount < 0 ? '-' : '+'}$${amountVal.toFixed(2)}`, false);
+
+    // Trigger Budget Cap Warning check if expense
+    if (type === 'debit') {
+        checkBudgetExceededAlerts(category, amountVal);
+    }
 });
 
 // Category Logo helper
@@ -654,6 +952,25 @@ colorBtns.forEach(btn => {
     });
 });
 
+// 5. Card design visual switcher
+const cardDesignBtns = document.querySelectorAll('.card-design-btn');
+const cardFrontElement = document.querySelector('.card-side.card-front');
+
+cardDesignBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        cardDesignBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const designName = btn.getAttribute('data-card-design');
+        state.cardDesign = designName;
+        
+        // Remove existing design classes
+        cardFrontElement.classList.remove('axe-black', 'axe-gold', 'midnight-carbon', 'emerald-jade', 'holographic-glass');
+        // Add new design class
+        cardFrontElement.classList.add(designName);
+    });
+});
+
 // ==========================================================================
 // CORE INITIALIZERS
 // ==========================================================================
@@ -676,6 +993,179 @@ txDetailsOverlay.addEventListener('click', (e) => {
         closeTransactionDetails();
     }
 });
+
+// ==========================================================================
+// FEATURE 3: DYNAMIC BUDGET INTERACTIONS
+// ==========================================================================
+const simBudgetFoodInput = document.getElementById('sim-budget-food');
+const simBudgetShoppingInput = document.getElementById('sim-budget-shopping');
+const simBudgetTravelInput = document.getElementById('sim-budget-travel');
+
+simBudgetFoodInput.addEventListener('change', (e) => {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val) && val >= 0) {
+        state.budgets.food = val;
+        updateFinancialDashboard();
+        checkBudgetExceededAlerts('food', 0);
+    }
+});
+simBudgetShoppingInput.addEventListener('change', (e) => {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val) && val >= 0) {
+        state.budgets.shopping = val;
+        updateFinancialDashboard();
+        checkBudgetExceededAlerts('shopping', 0);
+    }
+});
+simBudgetTravelInput.addEventListener('change', (e) => {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val) && val >= 0) {
+        state.budgets.travel = val;
+        updateFinancialDashboard();
+        checkBudgetExceededAlerts('travel', 0);
+    }
+});
+
+function checkBudgetExceededAlerts(category, addedAmount) {
+    if (!state.budgets[category]) return;
+    
+    // Calculate spent
+    let totalSpent = 0;
+    state.transactions.forEach(tx => {
+        if (tx.amount < 0 && tx.category === category) {
+            totalSpent += Math.abs(tx.amount);
+        }
+    });
+    
+    const cap = state.budgets[category];
+    const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+    
+    if (totalSpent >= cap) {
+        showToast(
+            'Budget Cap Exceeded', 
+            `Danger! Spent $${totalSpent.toFixed(2)} of $${cap.toFixed(2)} in ${categoryName}.`, 
+            true
+        );
+    } else if (totalSpent >= cap * 0.8) {
+        showToast(
+            'Budget Alert Warning', 
+            `Warning: ${categoryName} budget is at ${Math.round((totalSpent / cap) * 100)}% capacity.`, 
+            false
+        );
+    }
+}
+
+// Wallet Switcher click listeners
+const walletCards = document.querySelectorAll('.wallet-card');
+walletCards.forEach(card => {
+    card.addEventListener('click', () => {
+        walletCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        state.activeWallet = card.getAttribute('data-wallet');
+        state.balance = state.wallets[state.activeWallet].balance;
+        
+        updateFinancialDashboard();
+        renderTransactions(searchInput.value);
+    });
+});
+
+// ==========================================================================
+// FEATURE 5: INTERACTIVE CHART & PROJECTIONS
+// ==========================================================================
+const chartColTriggers = document.querySelectorAll('.chart-col-trigger');
+const chartTooltipEl = document.getElementById('chart-tooltip-el');
+const chartFocusLine = document.getElementById('chart-focus-line');
+const chartFocusDot = document.getElementById('chart-focus-dot');
+const togglePrediction = document.getElementById('toggle-prediction');
+const predictionLinePath = document.getElementById('prediction-line-path');
+
+togglePrediction.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        predictionLinePath.style.display = 'block';
+        showToast('AI insights loaded', 'Dashed purple line projects expected spending based on current cashflow velocity.', false);
+    } else {
+        predictionLinePath.style.display = 'none';
+    }
+});
+
+chartColTriggers.forEach(col => {
+    col.addEventListener('mouseenter', (e) => {
+        const day = col.getAttribute('data-day');
+        const x = parseFloat(col.getAttribute('data-x'));
+        const y = parseFloat(col.getAttribute('data-y'));
+        
+        // Calculate dynamic spent amount
+        const spent = getDailySpend(state.activeWallet, day);
+        
+        // Update Tooltip DOM
+        chartTooltipEl.querySelector('.tooltip-day').textContent = day;
+        chartTooltipEl.querySelector('.tooltip-amount').textContent = `$${spent.toFixed(2)}`;
+        
+        // Show tooltip
+        chartTooltipEl.style.display = 'flex';
+        // Wait a microtask to add active class for smooth animation transition
+        setTimeout(() => {
+            chartTooltipEl.classList.add('active');
+        }, 10);
+        
+        // Map SVG coordinates to HTML container coordinates
+        const container = col.closest('.svg-graph-container');
+        const containerRect = container.getBoundingClientRect();
+        
+        // Convert viewBox coordinates (320x180) to client coordinates
+        const clientX = (x / 320) * containerRect.width;
+        const clientY = (y / 180) * containerRect.height;
+        
+        chartTooltipEl.style.left = `${clientX}px`;
+        chartTooltipEl.style.top = `${clientY - 10}px`;
+        
+        // Show focus indicators
+        chartFocusLine.setAttribute('x1', x);
+        chartFocusLine.setAttribute('x2', x);
+        chartFocusLine.style.display = 'block';
+        
+        chartFocusDot.setAttribute('cx', x);
+        chartFocusDot.setAttribute('cy', y);
+        chartFocusDot.style.display = 'block';
+    });
+    
+    col.addEventListener('mouseleave', () => {
+        chartTooltipEl.classList.remove('active');
+        setTimeout(() => {
+            if (!chartTooltipEl.classList.contains('active')) {
+                chartTooltipEl.style.display = 'none';
+            }
+        }, 150);
+        
+        chartFocusLine.style.display = 'none';
+        chartFocusDot.style.display = 'none';
+    });
+});
+
+function getDailySpend(walletId, dayName) {
+    const baseValues = {
+        checking: { Monday: 140.00, Tuesday: 85.50, Wednesday: 115.00, Thursday: 50.25, Friday: 135.80, Saturday: 35.00, Sunday: 65.40 },
+        savings: { Monday: 0.00, Tuesday: 0.00, Wednesday: 0.00, Thursday: 0.00, Friday: 0.00, Saturday: 0.00, Sunday: 50.00 },
+        investments: { Monday: 0.00, Tuesday: 0.00, Wednesday: 0.00, Thursday: 0.00, Friday: 0.00, Saturday: 0.00, Sunday: 0.00 },
+        crypto: { Monday: 250.00, Tuesday: 0.00, Wednesday: 0.00, Thursday: 0.00, Friday: 0.00, Saturday: 0.00, Sunday: 0.00 }
+    };
+    
+    let base = baseValues[walletId]?.[dayName] || 0.00;
+    
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const currentDayName = daysOfWeek[new Date().getDay()];
+    
+    if (dayName === currentDayName) {
+        state.transactions.forEach(tx => {
+            if (tx.wallet === walletId && tx.amount < 0 && tx.timestamp === 'Just now') {
+                base += Math.abs(tx.amount);
+            }
+        });
+    }
+    
+    return base;
+}
 
 // Initialize dashboard screen data
 updateFinancialDashboard();
